@@ -1,0 +1,44 @@
+{
+   "abstract" : "Manage config files with YAML and variable references.",
+   "author" : [
+      "Matthew O'Connor <matthew@canonical.org>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.133380",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "YAML-AppConfig",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "Storable" : "0",
+            "UNIVERSAL" : "0",
+            "YAML" : "0.38"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.17"
+}
