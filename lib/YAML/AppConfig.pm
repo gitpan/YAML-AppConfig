@@ -2,13 +2,12 @@ package YAML::AppConfig;
 use strict;
 use warnings;
 use Carp;
-use UNIVERSAL qw(isa);
 use Storable qw(dclone);  # For Deep Copy
 
 ####################
 # Global Variables
 ####################
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 our @YAML_PREFS = qw(YAML::Syck YAML);
 
 #########################
@@ -113,7 +112,7 @@ sub _resolve_refs {
     if ( not ref $value ) {
         $value = $self->_resolve_scalar($value);
     }
-    elsif ( isa $value, 'HASH' ) {
+    elsif (ref $value eq 'HASH' ) {
         $value = dclone($value);
         my @hidden = $self->_push_scope($value);
         for my $key ( keys %$value ) {
@@ -122,13 +121,13 @@ sub _resolve_refs {
         $self->_pop_scope(@hidden);
         return $value;
     }
-    elsif ( isa $value, 'ARRAY' ) {
+    elsif (ref $value eq 'ARRAY' ) {
         $value = dclone($value);
         for my $item (@$value) {
             $item = $self->_resolve_refs( $item );
         }
     }
-    elsif ( isa $value, 'SCALAR' ) {
+    elsif (ref $value eq 'SCALAR' ) {
         $value = $self->_resolve_scalar($$value);
     } 
     else {
@@ -290,9 +289,11 @@ sub _install_accessors {
 1;
 __END__
 
+=encoding UTF-8
+
 =head1 NAME
 
-YAML::AppConfig - Manage configuration files with YAML and variable reference.
+YAML::AppConfig - Manage configuration files with YAML and variable references.
 
 =head1 SYNOPSIS
 
@@ -367,16 +368,16 @@ YAML::AppConfig - Manage configuration files with YAML and variable reference.
 =head1 DESCRIPTION
 
 L<YAML::AppConfig> extends the work done in L<Config::YAML> and
-L<YAML::ConfigFile> to allow more flexiable configuration files.
+L<YAML::ConfigFile> to allow more flexible configuration files.
 
 Your configuration is stored in YAML and then parsed and presented to you via
 L<YAML::AppConfig>.  Settings can be referenced using C<get> and C<set>
 methods and settings can refer to one another by using variables of the form
-C<$foo>, much in the style of C<AppConfig>.  See B<USING VARIABLES> below for
-more details.
+C<$foo>, much in the style of C<AppConfig>.  See L</"USING VARIABLES"> below
+for more details.
 
 The underlying YAML parser is either L<YAML>, L<YAML::Syck> or one of your
-chosing.  See B<THE YAML LIBRARY> below for more information on how a YAML
+choice.  See L</"THE YAML LIBRARY"> below for more information on how a YAML
 parser is picked.
 
 =head1 THE YAML LIBRARY
@@ -392,7 +393,7 @@ follows:
 If C<yaml_class> is given to C<new> then it used above all other
 considerations.  You can use this to force use of L<YAML> or L<YAML::Syck>
 when L<YAML::AppConfig> isn't using the one you'd like.  You can also use it
-specify your own YAML parser, as long as it's API compatiable with L<YAML> and
+specify your own YAML parser, as long as it's API compatible with L<YAML> and
 L<YAML::Syck>.
 
 =item The currently loaded YAML Parser
@@ -408,7 +409,7 @@ to load L<YAML::Syck> and failing that it will attempt to load L<YAML>.  If
 both fail then L<YAML::AppConfig> will C<croak> when you create a new object
 instance.
 
-=over
+=back
 
 =head1 USING VARIABLES
 
@@ -545,7 +546,7 @@ C<$no_resolve>, which is the same as C<get()'s> C<$no_resolve>.
 
 =head2 set_*(value)
 
-Convience methods to set values using a method, see C<set> and C<get_*>.
+Convenience methods to set values using a method, see C<set> and C<get_*>.
 These methods are curried versions of C<set>.
 
 =head2 config
@@ -567,8 +568,8 @@ file, string, or existing L<YAML::AppConfig> object.
 
 C<resolve()> runs the internal parser on non-reference scalars and returns the
 result.  If the scalar is a reference then it is deep copied and a copy is
-returned where the non-reference leaves of the data struture are parsed and
-replaced as described in B<USING VARIABLES>.
+returned where the non-reference leaves of the data structure are parsed and
+replaced as described in L</"USING VARIABLES">.
 
 =head2 dump([$file])
 
@@ -585,13 +586,17 @@ Matthew O'Connor E<lt>matthew@canonical.orgE<gt>
 Original implementations by Kirrily "Skud" Robert (as L<YAML::ConfigFile>) and
 Shawn Boyette (as L<Config::YAML>).
 
+Currently maintained by Grzegorz Rożniecki E<lt>xaerxess@gmail.comE<gt>.
+
 =head1 SEE ALSO
 
 L<YAML>, L<YAML::Syck>, L<Config::YAML>, L<YAML::ConfigFile>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
 Copyright 2006 Matthew O'Connor, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
+=cut

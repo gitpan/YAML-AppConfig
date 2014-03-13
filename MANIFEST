@@ -1,4 +1,6 @@
+Changes
 lib/YAML/AppConfig.pm
+LICENSE
 Makefile.PL
 MANIFEST
 t/00-load.t
